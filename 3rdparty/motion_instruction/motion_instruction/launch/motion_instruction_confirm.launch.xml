@@ -1,0 +1,56 @@
+<launch>
+  <arg name="launch_speech_recognition" default="true"/>
+  <arg name="api_config_path" default=""/>
+  <arg name="language_command_topic" default="/language_command"/>
+  <arg name="speech_text_topic" default="/motion_instruction/speech_text"/>
+  <arg name="speech_language" default="ja-JP"/>
+  <arg name="speech_engine" default="GoogleCloud"/>
+  <arg name="speech_device" default=""/>
+  <arg name="speech_google_cloud_credentials_json"
+       default="$(find-pkg-share ros_speech_recognition)/cfg/google-api.json"/>
+  <arg name="speech_launch_sound_play" default="true"/>
+  <arg name="speech_launch_audio_capture" default="true"/>
+  <arg name="launch_voicevox" default="true"/>
+  <arg name="voicevox_device" default=""/>
+  <arg name="voicevox_default_speaker" default="$(env VOICEVOX_DEFAULT_SPEAKER_ID 2)"/>
+  <arg name="voicevox_sound_topic" default="/robotsound_jp"/>
+  <arg name="voicevox_voice" default="$(var voicevox_default_speaker)"/>
+
+  <include if="$(var launch_voicevox)"
+           file="$(find-pkg-share voicevox)/launch/voicevox_texttospeech.launch.xml">
+    <arg name="device" value="$(var voicevox_device)"/>
+    <arg name="default_speaker" value="$(var voicevox_default_speaker)"/>
+    <arg name="launch_sound_play" value="true"/>
+  </include>
+
+  <include if="$(var launch_speech_recognition)"
+           file="$(find-pkg-share ros_speech_recognition)/launch/speech_recognition.launch.xml">
+    <arg name="launch_sound_play" value="$(var speech_launch_sound_play)"/>
+    <arg name="launch_audio_capture" value="$(var speech_launch_audio_capture)"/>
+    <arg name="language" value="$(var speech_language)"/>
+    <arg name="engine" value="$(var speech_engine)"/>
+    <arg name="device" value="$(var speech_device)"/>
+    <arg name="google_cloud_credentials_json"
+         value="$(var speech_google_cloud_credentials_json)"/>
+    <arg name="string_topic" value="$(var speech_text_topic)"/>
+  </include>
+
+  <node pkg="motion_instruction"
+        exec="motion_instruction_node"
+        name="motion_instruction_node"
+        output="screen">
+    <param from="$(find-pkg-share motion_instruction)/cfg/motion_instruction.yaml"/>
+    <param name="api_config_path" value="$(var api_config_path)"/>
+    <param name="input_topic" value="$(var language_command_topic)"/>
+    <param name="speech_input_topic" value="$(var speech_text_topic)"/>
+    <param name="voicevox_enabled" value="$(var launch_voicevox)"/>
+    <param name="voicevox_sound_topic" value="$(var voicevox_sound_topic)"/>
+    <param name="voicevox_voice" value="$(var voicevox_voice)" type="str"/>
+    <param name="execution_mode" value="voice_confirm"/>
+  </node>
+
+  <node pkg="motion_instruction"
+        exec="roseus_executor_bridge"
+        name="roseus_executor_bridge"
+        output="screen"/>
+</launch>

@@ -1,0 +1,19 @@
+# Local API/provider credentials
+motion_instruction/cfg/api/*
+!motion_instruction/cfg/api/.gitkeep
+
+# Environment secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Python/ROS build artifacts
+__pycache__/
+*.py[cod]
+build/
+install/
+log/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

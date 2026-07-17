@@ -1,0 +1,49 @@
+motion_instruction_node:
+  ros__parameters:
+    provider: azure_openai
+    api_config_path: ""
+    prompt_path: ""
+    input_topic: /language_command
+    speech_input_topic: /motion_instruction/speech_text
+    approval_response_topic: /motion_instruction/approval_response
+    speech_response_topic: /motion_instruction/speech_response
+    voicevox_enabled: true
+    voicevox_sound_topic: /robotsound_jp
+    voicevox_voice: "2"
+    voicevox_volume: 1.0
+    execution_mode: voice_confirm
+    confirmation_timeout_s: 15.0
+    default_frame_id: base_link
+    execution_frame_id: base_link
+    default_end_effector: right_hand
+    default_translation_direction: forward
+    default_translation_axis: x
+    default_translation_axis_direction: positive
+    default_translation_m: 0.010
+    default_rotation_axis: z
+    default_rotation_direction: positive
+    default_rotation_rad: 0.17453292519943295
+    allowed_frames:
+      - base_link
+      - torso_link
+      - right_tool
+      - left_tool
+    max_segments: 8
+    max_translation_per_segment_m: 0.10
+    max_translation_total_m: 0.20
+    max_rotation_per_segment_rad: 0.78539816339
+    max_rotation_total_rad: 1.57079632679
+    default_segment_duration_ms: 5000
+    min_segment_duration_ms: 200
+    max_segment_duration_ms: 30000
+    enable_qualitative_translation: false
+    enable_qualitative_rotation: false
+
+roseus_executor_bridge:
+  ros__parameters:
+    host: 127.0.0.1
+    port: 50950
+    connect_timeout_s: 2.0
+    request_timeout_s: 60.0
+    heartbeat_period_s: 2.0
+    reject_when_busy: true
