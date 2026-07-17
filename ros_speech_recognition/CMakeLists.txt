@@ -4,6 +4,7 @@ project(ros_speech_recognition)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+find_package(speech_recognition_msgs REQUIRED)
 
 function(ros_speech_recognition_find_uv out_var)
   find_program(_uv_executable uv)
@@ -103,6 +104,14 @@ install(
   DESTINATION share/${PROJECT_NAME}
   FILES_MATCHING PATTERN "*.launch.xml"
 )
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cfg")
+  install(
+    DIRECTORY cfg
+    DESTINATION share/${PROJECT_NAME}
+    FILES_MATCHING PATTERN "*.json"
+  )
+endif()
 
 set(_generated_script_dir "${CMAKE_CURRENT_BINARY_DIR}/generated_scripts")
 file(MAKE_DIRECTORY "${_generated_script_dir}")

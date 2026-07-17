@@ -1,4 +1,5 @@
 import array
+import json
 
 import pytest
 import rclpy
@@ -6,6 +7,7 @@ from rclpy.parameter import Parameter
 import speech_recognition as sr
 
 from ros_speech_recognition.node import array_to_bytes
+from ros_speech_recognition.recognize_google_cloud import RecognizerEx
 from ros_speech_recognition.node import resolve_sound_signal_path
 from ros_speech_recognition.node import SpeechRecognitionNode
 
@@ -93,6 +95,54 @@ def test_google_cloud_credentials(tmp_path):
         node.shutdown()
         node.destroy_node()
         rclpy.try_shutdown()
+
+
+def test_google_cloud_uses_google_auth(monkeypatch):
+    import googleapiclient.discovery
+
+    credentials_json = json.dumps({
+        'type': 'authorized_user',
+        'client_id': 'client-id',
+        'client_secret': 'client-secret',
+        'refresh_token': 'refresh-token',
+    })
+    audio = sr.AudioData(b'\0\0', 16000, 2)
+    seen = {}
+
+    monkeypatch.setattr(
+        sr.AudioData, 'get_flac_data',
+        lambda self, convert_rate=None, convert_width=None: b'flac')
+
+    class Request:
+        def execute(self):
+            return {'results': [{'alternatives': [{'transcript': 'hello'}]}]}
+
+    class Speech:
+        def recognize(self, body):
+            seen['body'] = body
+            return Request()
+
+    class Service:
+        def speech(self):
+            return Speech()
+
+    def build(api, version, credentials=None, cache_discovery=None):
+        seen['api'] = api
+        seen['version'] = version
+        seen['credentials_module'] = type(credentials).__module__
+        seen['cache_discovery'] = cache_discovery
+        return Service()
+
+    monkeypatch.setattr(googleapiclient.discovery, 'build', build)
+
+    recognizer = RecognizerEx()
+    assert recognizer.recognize_google_cloud(
+        audio, credentials_json=credentials_json) == 'hello '
+    assert seen['api'] == 'speech'
+    assert seen['version'] == 'v1'
+    assert seen['credentials_module'].startswith('google.oauth2')
+    assert seen['cache_discovery'] is False
+    assert seen['body']['config']['encoding'] == 'FLAC'
 
 
 def test_unknown_value_recalibrates_dynamic_energy():

@@ -6,6 +6,11 @@
 import speech_recognition as SR
 from speech_recognition import *
 
+GOOGLE_CLOUD_SPEECH_SCOPES = [
+    "https://www.googleapis.com/auth/cloud-platform",
+]
+
+
 class RecognizerEx(SR.Recognizer):
     def recognize_google_cloud(self, audio_data, credentials_json=None, language="en-US", preferred_phrases=None, show_all=False, user_config = {}):
         """
@@ -35,7 +40,10 @@ class RecognizerEx(SR.Recognizer):
         )
 
         try:
-            from oauth2client.client import GoogleCredentials
+            import google.auth
+            from google.auth import exceptions as google_auth_exceptions
+            from google.oauth2 import credentials as google_oauth2_credentials
+            from google.oauth2 import service_account
             from googleapiclient.discovery import build
             import googleapiclient.errors
 
@@ -47,18 +55,41 @@ class RecognizerEx(SR.Recognizer):
                 # override constant (used by googleapiclient.http.build_http())
                 googleapiclient.http.DEFAULT_HTTP_TIMEOUT_SEC = self.operation_timeout
 
-            if credentials_json is None:
-                api_credentials = GoogleCredentials.get_application_default()
-            else:
-                # the credentials can only be read from a file, so we'll make a temp file and write in the contents to work around that
-                with PortableNamedTemporaryFile("w") as f:
-                    f.write(credentials_json)
-                    f.flush()
-                    api_credentials = GoogleCredentials.from_stream(f.name)
+            try:
+                if credentials_json is None:
+                    api_credentials, _ = google.auth.default(
+                        scopes=GOOGLE_CLOUD_SPEECH_SCOPES)
+                else:
+                    credential_info = json.loads(credentials_json)
+                    credential_type = (
+                        credential_info.get("type") or "<missing>")
+                    if credential_type == "service_account":
+                        credentials_class = service_account.Credentials
+                        api_credentials = (
+                            credentials_class.from_service_account_info(
+                                credential_info,
+                                scopes=GOOGLE_CLOUD_SPEECH_SCOPES))
+                    elif credential_type == "authorized_user":
+                        credentials_class = (
+                            google_oauth2_credentials.Credentials)
+                        api_credentials = (
+                            credentials_class.from_authorized_user_info(
+                                credential_info,
+                                scopes=GOOGLE_CLOUD_SPEECH_SCOPES))
+                    else:
+                        raise RequestError(
+                            f"unsupported google cloud credentials type: "
+                            f"{credential_type}")
+            except (google_auth_exceptions.GoogleAuthError, ValueError) as e:
+                raise RequestError(
+                    "google cloud credentials error: {0}".format(e)) from e
 
             speech_service = build("speech", "v1", credentials=api_credentials, cache_discovery=False)
         except ImportError:
-            raise RequestError("missing google-api-python-client module: ensure that google-api-python-client is set up correctly.")
+            raise RequestError(
+                "missing google-api-python-client or google-auth module: "
+                "ensure that google-api-python-client and google-auth are "
+                "set up correctly.")
 
         speech_config = {"encoding": "FLAC", "sampleRateHertz": audio_data.sample_rate, "languageCode": language}
 
@@ -98,7 +129,6 @@ class RecognizerEx(SR.Recognizer):
                             transcript += "[{}]".format(speakerTag)
                         transcript += ' ' + word['word']
             elif "transcript" in result["alternatives"][0]:
-                print("trasncript?")
                 transcript += result["alternatives"][0]["transcript"].strip() + " "
 
         return transcript
