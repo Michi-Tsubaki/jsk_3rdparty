@@ -1,0 +1,9 @@
+repositories:
+  drivers/audio_common:
+    type: git
+    url: https://github.com/ros-drivers/audio_common.git
+    version: ros2
+  jsk_common_msgs:
+    type: git
+    url: https://github.com/Michi-Tsubaki/jsk_common_msgs.git
+    version: ros2

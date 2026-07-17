@@ -7,12 +7,19 @@ This package uses Python package [SpeechRecognition](https://pypi.python.org/pyp
 
 ## Tutorials
 
-### Normal tutorial
+### Setup
 
-1. Install Python dependencies with `uv` and build this package with colcon
+1. Import ROS 2 Jazzy source dependencies
 
-  Use a clean shell and source only ROS 2 Jazzy.
-  Do not source `/opt/ros/one/setup.bash`(ROS1) in the same shell.
+  `speech_recognition_msgs` is provided by `jsk_common_msgs`, and audio message/playback dependencies are provided by `audio_common`.
+  Please clone them into your colcon workspace source directory with `vcs`.
+
+  ```bash
+  cd ~/colcon_ws
+  vcs import src < src/jsk-ros-pkg/jsk_3rdparty/ros_speech_recognition/jazzy.repos
+  ```
+
+2. Install Python dependencies with `uv` and build this package with colcon
 
   ```bash
   cd <path to your colcon workspace>
@@ -27,7 +34,7 @@ This package uses Python package [SpeechRecognition](https://pypi.python.org/pyp
   source install/setup.bash
   ```
 
-  Add or update Python dependencies with `uv add` from the package directory:
+  Add or update Python dependencies with `uv add` from the package directory.
 
   ```bash
   cd <path to ros_speech_recognition package>
@@ -35,20 +42,20 @@ This package uses Python package [SpeechRecognition](https://pypi.python.org/pyp
   uv add --dev DEV_PACKAGE
   ```
   
-2. Launch speech recognition node
+3. Launch speech recognition node
 
   ```bash
   ros2 launch ros_speech_recognition speech_recognition.launch.xml
   ```
   
-3. Echo `/speech_to_text`
+4. Echo `/speech_to_text`
 
   ```bash
   ros2 topic echo /speech_to_text
   # you can get the recognition result
   ```
 
-### Parrotry tutorial (オウム返し)
+### Parrotry tutorial
 
 ```bash
 # English
@@ -279,7 +286,7 @@ services, for example:
 ```bash
 ros2 param set /speech_recognition language ja-JP
 ```
-  
+
 ## Author
 
 Yuki Furuta <<furushchev@jsk.imi.i.u-tokyo.ac.jp>>
