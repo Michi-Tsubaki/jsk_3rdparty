@@ -7,6 +7,8 @@
 
   <arg name="audio_topic" default="/audio"/>
   <arg name="voice_topic" default="/speech_to_text"/>
+  <arg name="string_topic"
+       default="/speech_recognition_candidates_to_string/output"/>
   <arg name="n_channel" default="1"/>
   <arg name="depth" default="16"/>
   <arg name="sample_rate" default="16000"/>
@@ -71,5 +73,6 @@
         pkg="ros_speech_recognition"
         exec="speech_recognition_candidates_to_string" output="screen">
     <remap from="~/input" to="$(var voice_topic)"/>
+    <remap from="~/output" to="$(var string_topic)"/>
   </node>
 </launch>

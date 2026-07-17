@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="language" default="ja-JP"/>
+  <arg name="device" default="plughw:2,0"/>
+  <arg name="google_cloud_credentials_json"
+       default="$(find-pkg-share ros_speech_recognition)/cfg/google-api.json"/>
+
+  <include file="$(find-pkg-share ros_speech_recognition)/launch/speech_recognition.launch.xml">
+    <arg name="engine" value="GoogleCloud"/>
+    <arg name="language" value="$(var language)"/>
+    <arg name="device" value="$(var device)"/>
+    <arg name="google_cloud_credentials_json"
+         value="$(var google_cloud_credentials_json)"/>
+  </include>
+</launch>
