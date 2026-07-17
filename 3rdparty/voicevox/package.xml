@@ -16,7 +16,6 @@
 
   <build_depend>curl</build_depend>
   <build_depend>git</build_depend>
-  <build_depend condition="$ROS_VERSION == 1">roseus</build_depend>
   <build_depend>sound_play_msgs</build_depend>
   <build_depend>unzip</build_depend>
   <build_depend>wget</build_depend>
