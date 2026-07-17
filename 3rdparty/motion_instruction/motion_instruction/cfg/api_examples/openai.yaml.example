@@ -1,0 +1,6 @@
+provider: openai
+model: YOUR_MODEL_NAME
+api_key_env: OPENAI_API_KEY
+base_url: ""
+timeout_s: 30.0
+max_retries: 2

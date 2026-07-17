@@ -1,0 +1,32 @@
+# Goal
+std_msgs/Header header
+string command_id
+string end_effector
+motion_instruction_interfaces/ResolvedMotionSegment[] segments
+bool dry_run
+---
+# Result
+uint8 SUCCEEDED=0
+uint8 REJECTED_INVALID=1
+uint8 REJECTED_COLLISION=2
+uint8 REJECTED_WORKSPACE=3
+uint8 IK_FAILURE=4
+uint8 EXECUTION_FAILED=5
+uint8 CANCELED=6
+uint8 BUSY=7
+uint8 EXECUTOR_UNAVAILABLE=8
+
+uint8 status
+string code
+string message
+uint32 completed_segments
+bool collision
+string collision_type
+string[] collision_pairs
+---
+# Feedback
+uint32 current_segment
+uint32 total_segments
+string phase
+float32 progress
+string message

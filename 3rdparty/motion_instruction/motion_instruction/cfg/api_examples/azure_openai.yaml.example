@@ -1,0 +1,7 @@
+provider: azure_openai
+deployment: YOUR_DEPLOYMENT_NAME
+endpoint_env: AZURE_OPENAI_ENDPOINT
+api_key_env: AZURE_OPENAI_API_KEY
+api_version: ""
+timeout_s: 30.0
+max_retries: 2
