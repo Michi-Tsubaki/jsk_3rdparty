@@ -1,6 +1,6 @@
 # jsk_3rdparty
 
-[![Build Status](https://travis-ci.org/jsk-ros-pkg/jsk_3rdparty.svg?branch=master)](https://travis-ci.org/jsk-ros-pkg/jsk_3rdparty)
+[![ROS 2 Jazzy CI](https://github.com/Michi-Tsubaki/jsk_3rdparty/actions/workflows/ros2_jazzy.yml/badge.svg)](https://github.com/Michi-Tsubaki/jsk_3rdparty/actions/workflows/ros2_jazzy.yml)
 
 
 ## Deb Build Status
