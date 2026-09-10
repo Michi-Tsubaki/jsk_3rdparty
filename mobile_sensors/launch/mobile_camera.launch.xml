@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="url" default="$(env MOBILE_SENSORS_CAMERA_URL '')"
+       description="HTTP/MJPEG URL of the mobile device camera stream,
+                    e.g. http://USER:PASSWORD@192.168.1.23:8081/"/>
+  <arg name="frame_id" default="mobile_camera_optical_frame"/>
+  <arg name="image_topic" default="/mobile_camera/image_raw/compressed"/>
+  <arg name="enable_raw" default="false" description="Also decode each JPEG frame and publish sensor_msgs/Image"/>
+  <arg name="raw_image_topic" default="/mobile_camera/image_raw"/>
+
+  <node name="mobile_camera" pkg="mobile_sensors" exec="mobile_camera.py"
+        respawn="true" output="screen">
+    <param name="url" value="$(var url)"/>
+    <param name="frame_id" value="$(var frame_id)"/>
+    <param name="image_topic" value="$(var image_topic)"/>
+    <param name="enable_raw" value="$(var enable_raw)"/>
+    <param name="raw_image_topic" value="$(var raw_image_topic)"/>
+  </node>
+</launch>
