@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>mobile_sensors</name>
+  <version>0.0.0</version>
+  <description>ROS 2 drivers that stream sensor data from mobile devices over the network.</description>
+  <maintainer email="tsubaki@jsk.t.u-tokyo.ac.jp">Michitoshi Tsubaki</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake</buildtool_depend>
+
+  <depend condition="$ROS_VERSION == 2">rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <exec_depend condition="$ROS_VERSION == 2">launch</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">launch_ros</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">launch_xml</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+
+  <export>
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
+  </export>
+</package>
