@@ -163,6 +163,18 @@ The `use_docker` and `docker_only` options allow you to:
 
 ## Usage
 
+### ROS 2: speak through an existing `/audio` playback node
+
+```bash
+ros2 launch voicevox voicevox_audio.launch.xml
+```
+
+Send Japanese text from another terminal:
+
+```bash
+ros2 topic pub --once /robotsound_jp std_msgs/msg/String "{data: 'こんにちは。音声テストです。'}"
+```
+
 ### Launch sound_play with VOICEVOX Text-to-Speech
 
 ```bash

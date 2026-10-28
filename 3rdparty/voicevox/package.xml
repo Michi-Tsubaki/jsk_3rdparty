@@ -27,6 +27,10 @@
   <exec_depend>python3</exec_depend>
   <exec_depend>sound_play</exec_depend>
   <exec_depend condition="$ROS_VERSION == 2">sound_play_msgs</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">rclpy</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">std_msgs</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">audio_common_msgs</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">launch_ros</exec_depend>
 
   <export>
     <build_type condition="$ROS_VERSION == 1">catkin</build_type>

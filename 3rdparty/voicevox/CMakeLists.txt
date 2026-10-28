@@ -161,6 +161,7 @@ foreach(_script request_synthesis.py list_speakers.py)
     "#!${VENV_PATH}/bin/python3\nimport runpy\nrunpy.run_path('${ENGINE_PATH}/node_scripts/${_script}', run_name='__main__')\n")
 endforeach()
 install(PROGRAMS
+  node_scripts/voicevox_audio.py
   ${CMAKE_CURRENT_BINARY_DIR}/node_scripts/request_synthesis.py ${CMAKE_CURRENT_BINARY_DIR}/node_scripts/list_speakers.py
   ${CMAKE_CURRENT_BINARY_DIR}/bin/run-voicevox ${CMAKE_CURRENT_BINARY_DIR}/bin/run-voicevox-docker
   DESTINATION lib/${PROJECT_NAME})
